@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout - Entelechy</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  </head>
+  <body class="bg-body">
+    <header class="site-header text-black">
+      <nav class="navbar navbar-expand-lg px-3">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="/index">
+            <img src="{{ url_for('static', filename='images/Entelechy_Logo.png') }}" alt="Entelechy logo" style="height: 60px;">
+          </a>
+          <div class="d-flex gap-3">
+            <a class="nav-link" href="/index">Home</a>
+            <a class="nav-link" href="/shop">Shop</a>
+            <a class="nav-link" href="/cart">Cart</a>
+            <a class="nav-link" href="/logout">Logout</a>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="padding-large">
+      <div class="container">
+        <div class="section-header text-center mb-5">
+          <h2 class="section-title">Checkout</h2>
+        </div>
+
+        <form action="/checkout" method="POST" class="row g-4">
+          <div class="col-md-6">
+            <h4 class="mb-3">Shipping Details</h4>
+            <input type="text" name="full_name" placeholder="Full Name" class="form-control mb-3">
+            <input type="text" name="phone" placeholder="Phone" class="form-control mb-3">
+            <textarea name="address" placeholder="Address" class="form-control mb-3" rows="4" required></textarea>
+
+            <select name="payment_method" class="form-control mb-3" required>
+              <option value="">Payment Method</option>
+              <option value="COD">COD</option>
+              <option value="UPI">UPI</option>
+              <option value="Card">Card</option>
+              <option value="Net Banking">Net Banking</option>
+            </select>
+          </div>
+
+          <div class="col-md-6">
+            <h4 class="mb-3">Order Summary</h4>
+            <div class="border p-3 rounded">
+              {% if cart %}
+                {% for item in cart %}
+                  <div class="d-flex justify-content-between mb-2">
+                    <span>{{ item['PRODUCT_NAME'] }} x {{ item['QUANTITY'] }}</span>
+                    <span>Rs. {{ item['PRICE'] * item['QUANTITY'] }}</span>
+                  </div>
+                {% endfor %}
+                <hr>
+                <h5 class="mb-3">Total: Rs. {{ total }}</h5>
+                <button type="submit" class="btn btn-dark">Place Order</button>
+              {% else %}
+                <p class="mb-0">Your cart is empty.</p>
+              {% endif %}
+            </div>
+          </div>
+        </form>
+      </div>
+    </main>
+  </body>
+</html>

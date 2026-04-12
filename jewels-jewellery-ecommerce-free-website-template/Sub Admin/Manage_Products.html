@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Products</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Manage Products</h1>
+
+        <!-- Add Product Button -->
+        <form action="{{ url_for('Add_Product') }}" method="get">
+            <button type="submit" class="btn btn-primary">Add New Product</button>
+        </form>
+
+        <table border="1" cellpadding="10">
+            <thead>
+                <tr>
+                    <th>Image</th>
+                    <th>Name</th>
+                    <th>Description</th>
+                    <th>Price</th>
+                    <th>Stock</th>
+                    <th>Category</th>
+                    <th>Material</th>
+                    <th>Weight</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for product in products %}
+                <tr>
+                    <td>
+                        <img src="{{ product.image_url }}" width="60">
+                    </td>
+                    <td>{{ product.product_name }}</td>
+                    <td>{{ product.description }}</td>
+                    <td>₹{{ product.price }}</td>
+                    <td>{{ product.stock_quantity }}</td>
+                    <td>{{ product.category_name }}</td>
+                    <td>{{ product.material_name }}</td>
+                    <td>{{ product.weight }} g</td>
+
+                    <td>
+                        <form action="{{ url_for('update_product', product_id=product.product_id) }}" method="get" style="display:inline;">
+                            <button type="submit">Edit</button>
+                        </form>
+
+                        <form action="{{ url_for('delete_product', product_id=product.product_id) }}" method="post" style="display:inline;">
+                            <button type="submit">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+
+        </table>
+    </div>
+</body>
+</html>
