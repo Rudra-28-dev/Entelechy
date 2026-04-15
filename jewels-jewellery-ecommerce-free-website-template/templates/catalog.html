@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>{{ page_title }} - Entelechy</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Upright:wght@300;400;500;600;700&family=Sofia+Sans:ital,wght@0,1..1000;1,1..1000&display=swap" rel="stylesheet">
+    <script src="{{ url_for('static', filename='js/modernizr.js') }}"></script>
+    <style>
+      .catalog-hero {
+        background: linear-gradient(135deg, rgba(239, 231, 220, 0.96), rgba(255, 248, 240, 0.88));
+        border-radius: 32px;
+        padding: 3.25rem;
+        margin: 2rem 0 3rem;
+        box-shadow: 0 20px 45px rgba(94, 71, 52, 0.08);
+      }
+      .catalog-card {
+        background: #fffdf9;
+        border: 1px solid rgba(94, 71, 52, 0.12);
+        border-radius: 24px;
+        overflow: hidden;
+        height: 100%;
+        transition: transform 0.25s ease, box-shadow 0.25s ease;
+        box-shadow: 0 10px 30px rgba(94, 71, 52, 0.08);
+      }
+      .catalog-card:hover {
+        transform: translateY(-6px);
+        box-shadow: 0 18px 36px rgba(94, 71, 52, 0.14);
+      }
+      .catalog-card img {
+        width: 100%;
+        height: 280px;
+        object-fit: cover;
+        background: #f5efe8;
+      }
+      .catalog-card-body {
+        padding: 1.5rem;
+      }
+      .catalog-meta {
+        color: #8a6c54;
+        font-size: 0.95rem;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+      }
+      .catalog-price {
+        font-size: 1.35rem;
+        color: #3d2a1f;
+        font-weight: 700;
+      }
+      .catalog-btn {
+        width: 100%;
+        border-radius: 999px;
+        padding: 0.8rem 1rem;
+      }
+    </style>
+  </head>
+  <body class="bg-body" data-bs-spy="scroll" data-bs-target="#navbar" data-bs-root-margin="0px 0px -40%" data-bs-smooth-scroll="true" tabindex="0">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <script>
+          alert({{ messages[0][1] | tojson }});
+        </script>
+      {% endif %}
+    {% endwith %}
+    <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+      <symbol xmlns="http://www.w3.org/2000/svg" id="user" viewBox="0 0 16 16"><path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H3Zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" /></symbol>
+      <symbol xmlns="http://www.w3.org/2000/svg" id="cart" viewBox="0 0 16 16"><path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2z" /></symbol>
+      <symbol xmlns="http://www.w3.org/2000/svg" id="navbar-icon" viewBox="0 0 16 16"><path d="M14 10.5a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0 0 1h3a.5.5 0 0 0 .5-.5zm0-3a.5.5 0 0 0-.5-.5h-7a.5.5 0 0 0 0 1h7a.5.5 0 0 0 .5-.5zm0-3a.5.5 0 0 0-.5-.5h-11a.5.5 0 0 0 0 1h11a.5.5 0 0 0 .5-.5z" /></symbol>
+    </svg>
+    <header id="header" class="site-header text-black">
+      <nav id="header-nav" class="navbar navbar-expand-lg px-3"><div class="container-fluid"><a class="navbar-brand" href="/index"><div class="navbar-brand logo-box"><img src="{{ url_for('static', filename='images/Entelechy_Logo.png') }}"></div></a><button class="navbar-toggler d-flex d-lg-none order-3 p-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#bdNavbar" aria-controls="bdNavbar" aria-expanded="false" aria-label="Toggle navigation"><svg class="navbar-icon" width="50" height="50"><use xlink:href="#navbar-icon"></use></svg></button><div class="offcanvas offcanvas-end" tabindex="-1" id="bdNavbar"><div class="offcanvas-header px-4 pb-0"><a class="navbar-brand" href="/index"><img src="{{ url_for('static', filename='images/Entelechy_Logo.png') }}" class="logo"></a><button type="button" class="btn-close btn-close-black" data-bs-dismiss="offcanvas" aria-label="Close"></button></div><div class="offcanvas-body"><ul id="navbar" class="navbar-nav text-capitalize justify-content-end align-items-center flex-grow-1 pe-3"><li class="nav-item"><a class="nav-link me-4" href="/index">Home</a></li><li class="nav-item"><a class="nav-link me-4" href="/about-us">About Us</a></li><li class="nav-item"><a class="nav-link me-4 {% if page_title == 'Women' %}active{% endif %}" href="/women">Women</a></li><li class="nav-item"><a class="nav-link me-4 {% if page_title == 'Men' %}active{% endif %}" href="/men">Men</a></li><li class="nav-item"><a class="nav-link me-4 {% if page_title == 'Shop' %}active{% endif %}" href="/shop">Shop</a></li><li class="nav-item"><a class="nav-link me-4" href="/logout">Logout</a></li><li class="nav-item"><div class="user-items ps-5"><ul class="d-flex justify-content-end list-unstyled"><li class="pe-3"><a href="/user"><svg class="user" width="18" height="18"><use xlink:href="#user"></use></svg></a></li><li><a href="/cart"><svg class="cart" width="18" height="18"><use xlink:href="#cart"></use></svg></a></li></ul></div></li></ul></div></div></div></nav>
+    </header>
+    <main class="padding-large"><div class="container"><section class="catalog-hero text-center"><p class="catalog-meta mb-2">{{ page_title }}</p><h1 class="display-5 mb-3">{{ page_heading }}</h1><p class="lead mb-0">{{ page_description }}</p></section><div class="row g-4">{% for product in products %}<div class="col-md-6 col-lg-4"><div class="catalog-card"><img src="{{ product_image_src(product['IMAGE_URL']) }}" alt="{{ product['PRODUCT_NAME'] }}"><div class="catalog-card-body"><p class="catalog-meta mb-2">{{ product['CATEGORY_NAME'] }} | {{ product['MATERIAL_NAME'] }}</p><h3 class="h4 mb-2">{{ product['PRODUCT_NAME'] }}</h3><p class="catalog-price mb-4">Rs. {{ product['PRICE'] }}</p><form action="/add_to_cart" method="POST"><input type="hidden" name="product_id" value="{{ product['PRODUCT_ID'] }}"><input type="hidden" name="next" value="{{ request.path }}"><button type="submit" class="btn btn-dark catalog-btn">Add to Cart</button></form></div></div></div>{% endfor %}</div></div></main>
+    <footer id="footer" class="overflow-hidden padding-large"><div class="container-fluid"><div class="row"><div class="row d-flex flex-wrap justify-content-between"><div class="col-lg-3 col-sm-6 pb-3 pe-4"><div class="footer-menu"><div class="navbar-brand logo-box"><img src="{{ url_for('static', filename='images/Entelechy_Logo.png') }}"></div><p>Entelechy is the bridge between a dream and its final form. We create jewelry for those who find beauty in the details and meaning in the milestones. Every piece is a realized potential, crafted to be as timeless as the stories they tell.</p></div><div class="copyright"><p>Copyright 2026</p></div></div><div class="col-lg-2 col-sm-6 pb-3"><div class="footer-menu text-capitalize"><h5 class="widget-title pb-2">Quick Links</h5><ul class="menu-list list-unstyled text-capitalize"><li class="menu-item pb-2"><a href="/index">Home</a></li><li class="menu-item pb-2"><a href="/about-us">About</a></li></ul></div></div><div class="col-lg-2 col-sm-6 pb-3"><div class="footer-menu text-capitalize"><h5 class="widget-title pb-2">Social</h5><div class="social-links"><ul class="list-unstyled"><li class="pb-2"><a href="#">Twitter</a></li><li class="pb-2"><a href="#">Pinterest</a></li><li class="pb-2"><a href="#">Instagram</a></li></ul></div></div></div><div class="col-lg-3 col-sm-6"><div class="footer-menu contact-item"><h5 class="widget-title text-capitalize pb-2">Contact Us</h5><p><a href="#">+91 8050480504</a></p><p><a href="mailto:">entelechy@yaahoo.com</a></p><p>PDEU, Gandhinagar, Gujarat - 382421</p></div></div></div></div></div></footer>
+    <script src="{{ url_for('static', filename='js/jquery-1.11.0.min.js') }}"></script><script src="{{ url_for('static', filename='js/bootstrap.bundle.min.js') }}"></script><script src="{{ url_for('static', filename='js/plugins.js') }}"></script><script src="{{ url_for('static', filename='js/script.js') }}"></script>
+  </body>
+</html>

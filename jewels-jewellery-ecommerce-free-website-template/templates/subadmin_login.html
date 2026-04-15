@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Subadmin Login</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/subadmin.css') }}">
+</head>
+<body class="subadmin-body">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <script>alert({{ messages[0][1] | tojson }});</script>
+        {% endif %}
+    {% endwith %}
+
+    <div class="subadmin-auth-shell">
+        <div class="subadmin-card subadmin-auth-card">
+            <div class="subadmin-eyebrow">Admin Panel</div>
+            <h1 class="subadmin-title">Subadmin Login</h1>
+            <p class="subadmin-copy">Access the product control panel to manage your jewellery catalog, stock, and pricing updates.</p>
+
+            <form method="POST" action="{{ url_for('subadmin.login') }}">
+                <div class="subadmin-field">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" placeholder="Enter your email" required>
+                </div>
+
+                <div class="subadmin-field">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" placeholder="Enter your password" required>
+                </div>
+
+                <button type="submit" class="subadmin-btn subadmin-btn-block">Login</button>
+            </form>
+
+            <div class="subadmin-copy" style="margin-top:18px; margin-bottom:0;">
+                This panel is for existing subadmin accounts only.
+            </div>
+        </div>
+    </div>
+</body>
+</html>

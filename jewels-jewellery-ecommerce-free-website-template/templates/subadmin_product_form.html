@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ form_title }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/subadmin.css') }}">
+</head>
+<body class="subadmin-body">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <script>alert({{ messages[0][1] | tojson }});</script>
+        {% endif %}
+    {% endwith %}
+
+    <div class="subadmin-shell">
+        <div class="subadmin-card subadmin-topbar">
+            <div>
+                <h1>{{ form_title }}</h1>
+                <p>Keep your jewelry catalog polished with complete and accurate product details.</p>
+            </div>
+            <a class="subadmin-btn-secondary" href="{{ url_for('subadmin.products') }}">Back to Products</a>
+        </div>
+
+        <div class="subadmin-card subadmin-section">
+            <form method="POST">
+                <div class="subadmin-form-grid">
+                    <div class="subadmin-field">
+                        <label for="product_name">Product Name</label>
+                        <input type="text" id="product_name" name="product_name" value="{{ product['PRODUCT_NAME'] if product else '' }}" required>
+                    </div>
+                    <div class="subadmin-field">
+                        <label for="image_url">Image URL</label>
+                        <input type="text" id="image_url" name="image_url" value="{{ product['IMAGE_URL'] if product else '' }}" required>
+                    </div>
+                    <div class="subadmin-field">
+                        <label for="price">Price</label>
+                        <input type="number" id="price" name="price" step="0.01" min="0" value="{{ product['PRICE'] if product else '' }}" required>
+                    </div>
+                    <div class="subadmin-field">
+                        <label for="stock_quantity">Stock Quantity</label>
+                        <input type="number" id="stock_quantity" name="stock_quantity" min="0" value="{{ product['STOCK_QUANTITY'] if product else '' }}" required>
+                    </div>
+                    <div class="subadmin-field">
+                        <label for="category">Category</label>
+                        <input type="text" id="category" name="category" value="{{ product['CATEGORY_NAME'] if product else '' }}" required>
+                    </div>
+                    <div class="subadmin-field">
+                        <label for="material">Material</label>
+                        <input type="text" id="material" name="material" value="{{ product['MATERIAL_NAME'] if product else '' }}" required>
+                    </div>
+                    <div class="subadmin-field">
+                        <label for="weight">Weight (g)</label>
+                        <input type="number" id="weight" name="weight" step="0.01" min="0" value="{{ product['WEIGHT'] if product else '' }}" required>
+                    </div>
+                    <div class="subadmin-field subadmin-full">
+                        <label for="description">Description</label>
+                        <textarea id="description" name="description" required>{{ product['DESCRIPTION'] if product else '' }}</textarea>
+                    </div>
+                </div>
+
+                <div class="subadmin-submit-row">
+                    <button type="submit" class="subadmin-btn">{{ submit_label }}</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

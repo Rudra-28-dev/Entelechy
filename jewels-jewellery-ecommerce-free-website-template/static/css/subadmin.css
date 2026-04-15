@@ -1,0 +1,341 @@
+:root {
+    --subadmin-bg: #f8f1e7;
+    --subadmin-panel: rgba(255, 250, 244, 0.94);
+    --subadmin-panel-strong: #ffffff;
+    --subadmin-accent: #b8894f;
+    --subadmin-accent-deep: #8d6737;
+    --subadmin-text: #2f2418;
+    --subadmin-muted: #776452;
+    --subadmin-border: #e7d7c4;
+    --subadmin-shadow: 0 22px 50px rgba(84, 59, 29, 0.12);
+    --subadmin-danger: #924338;
+    --subadmin-danger-bg: #fff2ef;
+    --subadmin-radius-lg: 28px;
+    --subadmin-radius-md: 18px;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body.subadmin-body {
+    margin: 0;
+    min-height: 100vh;
+    color: var(--subadmin-text);
+    font-family: Arial, sans-serif;
+    background:
+        radial-gradient(circle at top left, rgba(184, 137, 79, 0.16), transparent 28%),
+        radial-gradient(circle at bottom right, rgba(141, 103, 55, 0.1), transparent 22%),
+        linear-gradient(180deg, #fbf7f0 0%, #f1e5d4 100%);
+}
+
+.subadmin-shell {
+    width: min(1200px, calc(100% - 32px));
+    margin: 0 auto;
+    padding: 28px 0 48px;
+}
+
+.subadmin-auth-shell {
+    min-height: 100vh;
+    display: grid;
+    place-items: center;
+    padding: 24px;
+}
+
+.subadmin-card {
+    background: var(--subadmin-panel);
+    border: 1px solid var(--subadmin-border);
+    border-radius: var(--subadmin-radius-lg);
+    box-shadow: var(--subadmin-shadow);
+}
+
+.subadmin-auth-card {
+    width: min(480px, 100%);
+    padding: 40px 34px;
+}
+
+.subadmin-eyebrow {
+    margin-bottom: 12px;
+    color: var(--subadmin-accent);
+    font: 700 12px/1.4 Arial, sans-serif;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+}
+
+.subadmin-title {
+    margin: 0 0 10px;
+    font: 500 40px Georgia, serif;
+}
+
+.subadmin-copy {
+    margin: 0 0 24px;
+    color: var(--subadmin-muted);
+    line-height: 1.7;
+}
+
+.subadmin-field {
+    margin-bottom: 18px;
+}
+
+.subadmin-field label {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.03em;
+}
+
+.subadmin-field input,
+.subadmin-field textarea {
+    width: 100%;
+    border: 1px solid var(--subadmin-border);
+    border-radius: 14px;
+    background: #fff;
+    padding: 14px 16px;
+    color: var(--subadmin-text);
+    font: 14px Arial, sans-serif;
+}
+
+.subadmin-field textarea {
+    min-height: 140px;
+    resize: vertical;
+}
+
+.subadmin-field input:focus,
+.subadmin-field textarea:focus {
+    outline: none;
+    border-color: var(--subadmin-accent);
+    box-shadow: 0 0 0 4px rgba(184, 137, 79, 0.14);
+}
+
+.subadmin-btn,
+.subadmin-btn-secondary,
+.subadmin-btn-danger {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 12px 18px;
+    border-radius: 14px;
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+    font: 700 14px Arial, sans-serif;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.subadmin-btn {
+    color: #fff;
+    background: linear-gradient(135deg, var(--subadmin-accent) 0%, #d5ab73 100%);
+}
+
+.subadmin-btn-secondary {
+    color: var(--subadmin-accent-deep);
+    background: #fff;
+    border: 1px solid var(--subadmin-border);
+}
+
+.subadmin-btn-danger {
+    color: var(--subadmin-danger);
+    background: var(--subadmin-danger-bg);
+    border: 1px solid #ebc3bc;
+}
+
+.subadmin-btn:hover,
+.subadmin-btn-secondary:hover,
+.subadmin-btn-danger:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 10px 18px rgba(84, 59, 29, 0.09);
+}
+
+.subadmin-btn-block {
+    width: 100%;
+}
+
+.subadmin-topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    padding: 18px 22px;
+}
+
+.subadmin-topbar h1 {
+    margin: 0;
+    font: 500 34px Georgia, serif;
+}
+
+.subadmin-topbar p {
+    margin: 6px 0 0;
+    color: var(--subadmin-muted);
+}
+
+.subadmin-section {
+    margin-top: 24px;
+    padding: 28px;
+}
+
+.subadmin-hero h2 {
+    margin: 0;
+    font: 500 42px Georgia, serif;
+}
+
+.subadmin-hero p {
+    max-width: 760px;
+    margin: 12px 0 0;
+    color: var(--subadmin-muted);
+    line-height: 1.7;
+}
+
+.subadmin-grid {
+    display: grid;
+    gap: 18px;
+}
+
+.subadmin-stats {
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    margin-top: 24px;
+}
+
+.subadmin-actions {
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    margin-top: 24px;
+}
+
+.subadmin-card-inner {
+    padding: 24px;
+}
+
+.subadmin-card-label {
+    display: block;
+    margin-bottom: 10px;
+    color: var(--subadmin-muted);
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+}
+
+.subadmin-metric {
+    font: 500 42px Georgia, serif;
+}
+
+.subadmin-action-title {
+    margin: 0 0 10px;
+    font: 500 28px Georgia, serif;
+}
+
+.subadmin-action-copy {
+    margin: 0 0 18px;
+    color: var(--subadmin-muted);
+    line-height: 1.7;
+}
+
+.subadmin-table-wrap {
+    margin-top: 24px;
+    overflow: hidden;
+}
+
+.subadmin-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.subadmin-table th,
+.subadmin-table td {
+    padding: 16px 14px;
+    border-bottom: 1px solid var(--subadmin-border);
+    text-align: left;
+    vertical-align: top;
+}
+
+.subadmin-table th {
+    background: #f8eee1;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.subadmin-thumb {
+    width: 74px;
+    height: 74px;
+    object-fit: cover;
+    border-radius: 16px;
+    border: 1px solid var(--subadmin-border);
+}
+
+.subadmin-product-title {
+    margin-bottom: 6px;
+    font: 500 21px Georgia, serif;
+}
+
+.subadmin-muted {
+    color: var(--subadmin-muted);
+    line-height: 1.6;
+}
+
+.subadmin-inline-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.subadmin-form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px;
+}
+
+.subadmin-full {
+    grid-column: 1 / -1;
+}
+
+.subadmin-submit-row {
+    margin-top: 22px;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.subadmin-preview-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 18px;
+    margin-top: 24px;
+}
+
+.subadmin-preview-card {
+    overflow: hidden;
+}
+
+.subadmin-preview-image {
+    width: 100%;
+    height: 210px;
+    object-fit: cover;
+    display: block;
+}
+
+.subadmin-preview-body {
+    padding: 18px;
+}
+
+.subadmin-empty {
+    padding: 48px 24px;
+    text-align: center;
+    color: var(--subadmin-muted);
+}
+
+@media (max-width: 720px) {
+    .subadmin-topbar {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .subadmin-form-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .subadmin-shell {
+        width: min(100%, calc(100% - 24px));
+    }
+}
