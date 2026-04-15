@@ -1,13 +1,18 @@
 import os
 
-from flask import Blueprint, Flask, flash, redirect, render_template, request, session, url_for
+from flask import Blueprint, Flask, flash, g, redirect, render_template, request, session, url_for
 
 from helpers import resolve_image_path
 from model import Database
 
 
 subadmin_bp = Blueprint("subadmin", __name__, url_prefix="/subadmin")
-db = Database()
+
+
+def get_db():
+    if "db" not in g:
+        g.db = Database()
+    return g.db
 
 
 def is_subadmin_logged_in():
@@ -17,7 +22,7 @@ def is_subadmin_logged_in():
 @subadmin_bp.route("/login", methods=["GET", "POST"])
 def login():
     if request.method == "POST":
-        subadmin = db.login_subadmin(
+        subadmin = get_db().login_subadmin(
             request.form["email"],
             request.form["password"]
         )
@@ -37,8 +42,8 @@ def dashboard():
     if not is_subadmin_logged_in():
         return redirect(url_for("subadmin.login"))
 
-    subadmin = db.get_subadmin_by_id(session["subadmin_id"])
-    products = db.get_products()
+    subadmin = get_db().get_subadmin_by_id(session["subadmin_id"])
+    products = get_db().get_products()
 
     return render_template(
         "subadmin_dashboard.html",
@@ -58,7 +63,7 @@ def products():
 
     return render_template(
         "subadmin_products.html",
-        products=db.get_products()
+        products=get_db().get_products()
     )
 
 
@@ -68,7 +73,7 @@ def add_product():
         return redirect(url_for("subadmin.login"))
 
     if request.method == "POST":
-        if db.create_product(request.form):
+        if get_db().create_product(request.form):
             flash("Product added successfully.", "success")
             return redirect(url_for("subadmin.products"))
 
@@ -88,14 +93,14 @@ def edit_product(product_id):
     if not is_subadmin_logged_in():
         return redirect(url_for("subadmin.login"))
 
-    product = db.get_product(product_id)
+    product = get_db().get_product(product_id)
 
     if not product:
         flash("Product not found.", "error")
         return redirect(url_for("subadmin.products"))
 
     if request.method == "POST":
-        if db.update_product(product_id, request.form):
+        if get_db().update_product(product_id, request.form):
             flash("Product updated successfully.", "success")
             return redirect(url_for("subadmin.products"))
 
@@ -115,7 +120,7 @@ def delete_product(product_id):
     if not is_subadmin_logged_in():
         return redirect(url_for("subadmin.login"))
 
-    if db.delete_product(product_id):
+    if get_db().delete_product(product_id):
         flash("Product deleted successfully.", "success")
     else:
         flash("Unable to delete product. It may be linked to existing records.", "error")
