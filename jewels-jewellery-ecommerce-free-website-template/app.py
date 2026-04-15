@@ -1,6 +1,6 @@
 import os
 
-from flask import Flask, render_template, request, redirect, session, flash
+from flask import Flask, g, render_template, request, redirect, session, flash
 
 from helpers import resolve_image_path, split_products_for_sections
 from model import Database
@@ -10,7 +10,22 @@ app = Flask(__name__)
 app.secret_key = os.getenv("FLASK_SECRET_KEY", "secret123")
 app.register_blueprint(subadmin_bp)
 
-db = Database()
+
+def get_db():
+    if "db" not in g:
+        g.db = Database()
+    return g.db
+
+
+@app.teardown_appcontext
+def close_db(exception):
+    db = g.pop("db", None)
+    if db is not None:
+        try:
+            db.cursor.close()
+            db.db.close()
+        except Exception:
+            pass
 
 
 @app.context_processor
@@ -28,7 +43,7 @@ def register():
     if request.method == 'POST':
         print("REGISTER HIT")  # debug
 
-        db.register_user(request.form)
+        get_db().register_user(request.form)
         return redirect('/login')
 
     return render_template('register.html')
@@ -41,7 +56,7 @@ def login():
         email = request.form['email']
         password = request.form['password']
 
-        user = db.login_user(email, password)
+        user = get_db().login_user(email, password)
 
         if user:
             session['user_id'] = user['USER_ID']
@@ -57,10 +72,10 @@ def home():
     if 'user_id' not in session:
         return redirect('/login')
 
-    products = db.get_products()
+    products = get_db().get_products()
     featured_products = products[:6]
     trending_products = products[3:9] if len(products) > 6 else products[:6]
-    user = db.get_user_by_id(session['user_id'])
+    user = get_db().get_user_by_id(session['user_id'])
 
     return render_template(
         'index.html',
@@ -84,7 +99,7 @@ def shop():
     if 'user_id' not in session:
         return redirect('/login')
 
-    products = db.get_products()
+    products = get_db().get_products()
     return render_template(
         'catalog.html',
         products=products,
@@ -100,7 +115,7 @@ def women():
     if 'user_id' not in session:
         return redirect('/login')
 
-    products = db.get_products()
+    products = get_db().get_products()
     women_products, _ = split_products_for_sections(products)
     return render_template(
         'catalog.html',
@@ -117,7 +132,7 @@ def men():
     if 'user_id' not in session:
         return redirect('/login')
 
-    products = db.get_products()
+    products = get_db().get_products()
     _, men_products = split_products_for_sections(products)
     return render_template(
         'catalog.html',
@@ -135,9 +150,9 @@ def user():
         return redirect('/login')
 
     user_id = session['user_id']
-    user_profile = db.get_user_by_id(user_id)
-    cart_items = db.get_cart(user_id)
-    order_count = db.get_order_count(user_id)
+    user_profile = get_db().get_user_by_id(user_id)
+    cart_items = get_db().get_cart(user_id)
+    order_count = get_db().get_order_count(user_id)
     cart_total = sum(item['PRICE'] * item['QUANTITY'] for item in cart_items)
 
     return render_template(
@@ -156,8 +171,10 @@ def product(product_id):
     if 'user_id' not in session:
         return redirect('/login')
 
-    product = db.get_product(product_id)
+
+    product = get_db().get_product(product_id)
     return render_template('product.html', product=product)
+
 
 
 # ---------------- ADD TO CART ---------------- #
@@ -180,7 +197,7 @@ def add_to_cart():
     except ValueError:
         return "Invalid product data", 400
 
-    db.add_to_cart(user_id, product_id, quantity)
+    get_db().add_to_cart(user_id, product_id, quantity)
     flash("Item added to cart successfully.", "success")
 
     return redirect(next_page)
@@ -193,7 +210,8 @@ def cart():
         return redirect('/login')
 
     user_id = session['user_id']
-    cart_items = db.get_cart(user_id)
+    cart_items = get_db().get_cart(user_id)
+
 
     total = sum(item['PRICE'] * item['QUANTITY'] for item in cart_items)
 
@@ -204,12 +222,12 @@ def cart():
 @app.route('/remove_from_cart/<int:product_id>')
 def remove_from_cart(product_id):
     user_id = session['user_id']
-
-    db.cursor.execute(
+    get_db().cursor.execute(
         "DELETE FROM SHOPPING_CART WHERE USER_ID=%s AND PRODUCT_ID=%s",
         (user_id, product_id)
     )
-    db.db.commit()
+    get_db().db.commit()
+
 
     return redirect('/cart')
 
@@ -221,7 +239,7 @@ def checkout():
         return redirect('/login')
 
     user_id = session['user_id']
-    cart_items = db.get_cart(user_id)
+    cart_items = get_db().get_cart(user_id)
 
     total = sum(item['PRICE'] * item['QUANTITY'] for item in cart_items)
 
@@ -230,23 +248,24 @@ def checkout():
         payment_method = request.form['payment_method']
 
         # 1. Create Order
-        order_id = db.create_order(user_id, total, payment_method)
+        order_id = get_db().create_order(user_id, total, payment_method)
 
         # 2. Add Order Items
-        db.add_order_items(order_id, cart_items)
+        get_db().add_order_items(order_id, cart_items)
 
         # 3. Payment
-        db.add_payment(order_id, total, payment_method)
+        get_db().add_payment(order_id, total, payment_method)
 
         # 4. Shipping
-        db.add_shipping(order_id, address)
+        get_db().add_shipping(order_id, address)
 
         # 5. Clear Cart
-        db.clear_cart(user_id)
+        get_db().clear_cart(user_id)
 
         return redirect('/success')
 
     return render_template('checkout.html', cart=cart_items, total=total)
+
 
 
 # ---------------- PLACE ORDER ---------------- #
@@ -255,18 +274,19 @@ def place_order():
     user_id = session['user_id']
     payment_method = request.form['payment_method']
 
-    cart_items = db.get_cart(user_id)
+    cart_items = get_db().get_cart(user_id)
     total = sum(item['PRICE'] * item['QUANTITY'] for item in cart_items)
 
-    order_id = db.create_order(user_id, total, payment_method)
+    order_id = get_db().create_order(user_id, total, payment_method)
 
-    db.add_order_items(order_id, cart_items)
-    db.add_payment(order_id, total, payment_method)
-    db.add_shipping(order_id, "User Address")  # later dynamic
+    get_db().add_order_items(order_id, cart_items)
+    get_db().add_payment(order_id, total, payment_method)
+    get_db().add_shipping(order_id, "User Address")  # later dynamic
 
-    db.clear_cart(user_id)
+    get_db().clear_cart(user_id)
 
     return redirect('/success')
+
 
 
 # ---------------- SUCCESS ---------------- #
